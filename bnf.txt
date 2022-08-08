@@ -1,0 +1,81 @@
+<Program> ::= 'PROGRAM' <onoma> '/n' <code> | 'PROGRAM' <onoma> '/n' <functions> <code>
+
+<onoma> ::= <letter> | <letter> <onoma> | '_' <letter> | <onoma> <digit> |  '_' <digit> |  '_' <onoma>
+
+<letter> ::= a | b | ... | z | A | B | ... | Z
+
+<digit> ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 
+
+<no_zero> ::= 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 
+
+<number> ::= <digit> | <number> <digit>
+
+<positive> ::= <no_zero> | <no_zero> <number>
+
+<negative> ::= '-' <positive>
+
+<numbers> ::= <positive> | <negative> | 0
+ 
+<symbol> ::= '_' | ',' | ';' | '(' | ')' | '[' | ']' | '"' | '%' | '!' | '@' | '#' | '$' | '&' | '|' | '?'
+
+<spaces> ::= '/n' | '/t'
+
+<expressions> ::= '+' | '*' | '-' | '^' | '/'
+
+<operators> ::= '<' | '>' | '==' | '!='
+
+<logic_operators> ::= 'AND' | 'OR'
+
+<code> ::= 'STARTMAIN' <variables> <commands> 'ENDMAIN'
+
+<functions> ::= 'FUNCTION' <onoma> '(' <parameters> ')' '/n' <function> 'END_FUNCTION'
+
+<function> ::= <variables> <arrays> <commands> 'RETURN' <value> | <arrays> <commands> 'RETURN' <value> | <variables> <commands> 'RETURN' <value> | <commands> 'RETURN' <value> | 'RETURN' <value> | <arrays> 'RETURN' <value>
+
+<parameters> ::= <type> <onoma> | <numbers> | <type> <onoma> ',' <parameters> | <numbers> ',' <parameters>
+
+<parameters_call> ::= <onoma> | <onoma> ',' <onoma> ... ',' <onoma> | <numbers> ',' <numbers> ... ',' <numbers> | <numbers> | <onoma> ',' <parameters> | <numbers> ',' <parameters>
+
+<variables> ::= VARS <variable> 
+
+<type> ::= 'CHAR' | 'INTEGER'
+
+<variable> ::=  <type> <onoma> ';' | <type> <onoma>  ... ',' <type> <onoma> ';'
+
+<arrays> ::= VARS <type> <onoma> '[' <positive> ']' ';' | VARS <type> <onoma> '[' <positive> ']' ',' ... ',' <onoma> '[' <positive> ']' ';'
+
+<commands> ::= <anathesi> | <while> | <for> | <if_statement> | <switch> | <print> | <end_loop> | <comments>
+
+<anathesi> ::= <onoma> '=' <ekfrasi> ';'
+
+<ekfrasi> ::= <ekfrasis> | <call_function>
+
+<ekfrasis> ::= <literal> | <comb>
+
+<comb> ::= <onoma> | <comb> <expressions> <comb> | '(' <comb> ')' | <literal> <expressions> <literal> |  '(' <comb> ')' <expressions> <comb> |  '(' <comb> ')' <expressions> <literal>
+
+<call_function> ::= <onoma> '(' <parameters_call> ')' ';'
+
+<print> ::= 'PRINT' '(' '"' <content> '"' ')' ';' | 'PRINT' '(' '"' <content> '"' ',' <printname> ')' ';'
+
+<printname> ::= '[' <onoma> ']' | '[' <onoma> ']' ',' <printname>
+
+<while> ::= 'WHILE' <condition> <commands> 'ENDWHILE'
+
+<condition> ::= <value> <operators> <value> | <value> <logic_operators> <value> | <numbers> <expessions> <numbers> <operators> <numbers>
+
+<for> ::= 'FOR' <onoma> ':' '=' <numbers> 'TO' <numbers> 'STEP' <numbers> <commands> 'ENDFOR'
+
+<if_statement> ::= 'IF' <condition> 'THEN' <commands> 'ENDIF' | 'IF' <condition> 'THEN' <commands> 'ELSE' <commands> 'ENDIF' | 'IF' <condition> 'THEN' <commands> 'ELSEIF' <commands> ... 'ELSE' <commands> 'ENDIF'
+
+<switch> ::= 'SWITCH' '(' <onoma> ')' 'CASE' '(' <literal> ')' ':' <commands> ... 'ENDSWITCH' | 'SWITCH' '(' <literal> ')' 'CASE' '(' <literal> ')' ':' <commands> ... 'DEFAULT' ':' <commands> 'ENDSWITCH'
+
+<end_loop> ::= 'BREAK' ';'
+
+<comments> ::= '%' <content> '/n'
+
+<content> ::= <letter> <content> | <number> <content> | <symbol> <content> | <empty>
+
+<value> ::= <onoma> | <literal>
+
+<literal> ::= <letter> | <numbers>

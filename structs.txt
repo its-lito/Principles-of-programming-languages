@@ -1,0 +1,45 @@
+BNF
+
+<Program> ::= 'PROGRAM' <onoma> '\n' <code> | 'PROGRAM' <onoma> '\n' <structs> <code> | 'PROGRAM' <onoma> '\n' <structs> <functions> <code> | 'PROGRAM' <onoma> '\n' <functions> <code>
+
+<structs> ::= 'STRUCT' ONOMA '\n' <struct> 'ENDSTRUCT' | 'TYPEDEF' 'STRUCT' ONOMA '\n' <struct> ONOMA 'ENDSTRUCT'
+
+<struct> ::= <variables> <arrays> | <arrays> | <variables>
+
+
+
+---------------------------------------------------------------------
+BISON
+
+%token STRUCT
+%token ENDSTRUCT
+%token TYPEDEF
+
+program : PROGRAM ONOMA NEWLINE code
+	| PROGRAM ONOMA NEWLINE functions code
+	| PROGRAM ONOMA NEWLINE structs functions code
+	| PROGRAM ONOMA NEWLINE structs code
+;
+
+structs : STRUCT ONOMA NEWLINE struct ENDSTRUCT
+	| TYPEDEF STRUCT ONOMA NEWLINE struct ONOMA ENDSTRUCT
+;
+
+struct : variables arrays
+	| arrays
+	| variables
+;
+
+variables : VARS variable
+	| structvars
+;
+
+structvars : STRUCT ONOMA ONOMA
+	| STRUCT ONOMA ONOMA ',' structvars
+;
+---------------------------------------------------------------------
+FLEX
+
+"STRUCT"	{return STRUCT; }
+"ENDSTRUCT"	{return ENDSTRUCT; }
+"TYPEDEF"	{return TYPEDEF; }
